@@ -33,4 +33,17 @@ contract TrustyPoll is SafeMath {
     feeAccount = feeAccount_;
     fee = fee_;
   }
+  
+  modifier onlyAdmin() {
+    require(msg.sender == admin);
+    _;
+  } 
+
+  function changeAdmin(address admin_) onlyAdmin public {
+    admin = admin_;
+  }
+  
+  function changeFeeAccount(address feeAccount_) onlyAdmin public {
+    feeAccount = feeAccount_;
+  }
 }
