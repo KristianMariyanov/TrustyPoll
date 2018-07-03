@@ -28,7 +28,7 @@ contract TrustyPoll is SafeMath {
   address public feeAccount; //the account that will receive fees
   uint public fee;
 
-  function DexETH(address admin_, address feeAccount_, uint fee_) public {
+  function TrustyPoll(address admin_, address feeAccount_, uint fee_) public {
     admin = admin_;
     feeAccount = feeAccount_;
     fee = fee_;
