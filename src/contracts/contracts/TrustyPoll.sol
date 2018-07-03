@@ -45,5 +45,10 @@ contract TrustyPoll is SafeMath {
   
   function changeFeeAccount(address feeAccount_) onlyAdmin public {
     feeAccount = feeAccount_;
+  }  
+
+  function changeFee(uint fee_) onlyAdmin public {
+    require (fee_ < fee);
+    fee = fee_;
   }
 }
