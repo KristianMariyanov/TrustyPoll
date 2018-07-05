@@ -68,14 +68,14 @@ contract TrustyPoll is SafeMath {
   }
   
   function createPoll(string title) public {
-      pollId++;
+      pollId = SafeAdd(pollId, 1);
       polls.push(Poll(pollId, title));
       pollAuthors[pollId] = msg.sender;
   }
   
   function createOption(uint poll, string title) public {
       require(pollAuthors[poll] == msg.sender);
-      optionId++;
+      optionId  = SafeAdd(optionId, 1);
       pollOptions[poll].push(Option(optionId, title, poll));
   }
   
@@ -86,10 +86,10 @@ contract TrustyPoll is SafeMath {
     
     // if user already vote, remove the old vote;
     if (votes[poll][msg.sender] != 0) {
-        pollVotesCount[poll][votes[poll][msg.sender]]--;
+      pollVotesCount[poll][votes[poll][msg.sender]] = safeSub(pollVotesCount[poll][votes[poll][msg.sender]], 1);
     }
     
-    pollVotesCount[poll][option]++;
+    pollVotesCount[poll][option] = safeAdd(pollVotesCount[poll][option], 1);
     
     // override previous response
     votes[poll][msg.sender] = option;
