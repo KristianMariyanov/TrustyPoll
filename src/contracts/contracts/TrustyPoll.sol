@@ -23,7 +23,7 @@ contract TrustyPoll is SafeMath {
   address public admin; //the admin address
   address public feeAccount; //the account that will receive fees
   uint public fee;
-  uint private optionsId;
+  uint private optionId;
   uint private pollId;
 
   constructor(address admin_, address feeAccount_, uint fee_) public {
@@ -33,17 +33,20 @@ contract TrustyPoll is SafeMath {
   }
   
   struct Poll {
-      uint id,
-      string title
+      uint id;
+      string title;
     }
 
  struct Option {
-      uint id,
-      string title,
-      string pollId
+      uint id;
+      string title;
+      uint pollId;
     }
     
-    mapping(bytes32 => mapping(address, bytes32)) public votes; (poll -> (user -> option)
+    mapping(bytes32 => mapping(address => bytes32)) public votes; //(poll -> (user -> option)
+    mapping(uint => Option[]) public pollOptions; //(poll -> (user -> option)
+    mapping(uint => address) public pollAuthors; //(poll -> (user -> option)
+    Poll[] public polls;
   
   modifier onlyAdmin() {
     require(msg.sender == admin);
@@ -63,8 +66,15 @@ contract TrustyPoll is SafeMath {
     fee = fee_;
   }
   
-  function createPoll() {
-      pollId++
-      new Poll() {}
+  function createPoll(string title) public {
+      pollId++;
+      polls.push(Poll(pollId, title));
+      pollAuthors[pollId] = msg.sender;
+  }
+  
+  function createOption(uint poll, string title) public {
+      require(pollAuthors[poll] == msg.sender);
+      optionId++;
+      pollOptions[poll].push(Option(optionId, title, poll));
   }
 }
