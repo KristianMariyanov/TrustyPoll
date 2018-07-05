@@ -43,7 +43,8 @@ contract TrustyPoll is SafeMath {
       uint pollId;
     }
     
-    mapping(bytes32 => mapping(address => bytes32)) public votes; //(poll -> (user -> option)
+    mapping(uint => mapping(address => uint)) public votes; //(poll -> (user -> option)
+    mapping(uint => mapping(uint => uint)) public pollVotesCount; //(poll -> (option -> votesCount)
     mapping(uint => Option[]) public pollOptions; //(poll -> (user -> option)
     mapping(uint => address) public pollAuthors; //(poll -> (user -> option)
     Poll[] public polls;
@@ -76,5 +77,21 @@ contract TrustyPoll is SafeMath {
       require(pollAuthors[poll] == msg.sender);
       optionId++;
       pollOptions[poll].push(Option(optionId, title, poll));
+  }
+  
+  function vote (uint poll, uint option) public {
+    require(pollAuthors[poll] != msg.sender); // authors cannot vote
+    require(option > 0);
+    require(poll > 0);
+    
+    // if user already vote, remove the old vote;
+    if (votes[poll][msg.sender] != 0) {
+        pollVotesCount[poll][votes[poll][msg.sender]]--;
+    }
+    
+    pollVotesCount[poll][option]++;
+    
+    // override previous response
+    votes[poll][msg.sender] = option;
   }
 }
