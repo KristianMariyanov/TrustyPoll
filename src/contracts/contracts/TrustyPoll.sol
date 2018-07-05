@@ -17,22 +17,33 @@ contract SafeMath {
     assert(c>=a && c>=b);
     return c;
   }
-
-  function assert(bool assertion) internal pure {
-    require(assertion);
-  }
 }
 
 contract TrustyPoll is SafeMath {
   address public admin; //the admin address
   address public feeAccount; //the account that will receive fees
   uint public fee;
+  uint private optionsId;
+  uint private pollId;
 
-  function TrustyPoll(address admin_, address feeAccount_, uint fee_) public {
+  constructor(address admin_, address feeAccount_, uint fee_) public {
     admin = admin_;
     feeAccount = feeAccount_;
     fee = fee_;
   }
+  
+  struct Poll {
+      uint id,
+      string title
+    }
+
+ struct Option {
+      uint id,
+      string title,
+      string pollId
+    }
+    
+    mapping(bytes32 => mapping(address, bytes32)) public votes; (poll -> (user -> option)
   
   modifier onlyAdmin() {
     require(msg.sender == admin);
@@ -50,5 +61,10 @@ contract TrustyPoll is SafeMath {
   function changeFee(uint fee_) onlyAdmin public {
     require (fee_ < fee);
     fee = fee_;
+  }
+  
+  function createPoll() {
+      pollId++
+      new Poll() {}
   }
 }
