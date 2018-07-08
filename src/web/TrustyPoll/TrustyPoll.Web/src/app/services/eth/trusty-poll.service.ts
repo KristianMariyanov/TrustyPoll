@@ -51,12 +51,12 @@ export class TrustyPollService {
         }
     }
 
-    public getPollWithId(pollId: number): Observable<any> {
+    public getPollWithIndex(pollIndex: number): Observable<any> {
        const contract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddr);
         return Observable.fromPromise(this.web3Service.web3.eth.call({
             to: this.contractAddr,
-            data: contract.methods.polls(pollId).encodeABI()
-        }));
+            data: contract.methods.polls(pollIndex).encodeABI()
+        })).map(poll => this.web3Service.web3.utils.toAscii(poll));
     }
 
     private sendWalletTransaction(tx: any, gasPriceInGwei: number): Observable<any> {
