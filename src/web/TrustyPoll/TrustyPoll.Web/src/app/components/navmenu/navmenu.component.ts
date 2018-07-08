@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
     IdentityService
@@ -9,12 +9,19 @@ import {
     templateUrl: './navmenu.component.html',
     styleUrls: ['./navmenu.component.css']
 })
-export class NavMenuComponent{
+export class NavMenuComponent implements OnInit {
+
     constructor(
         private identityService: IdentityService) {
     }
-    
+
     public imgUrl = '';
-    public isLoggedIn = this.identityService.isLoggedIn();
-    public user = this.identityService.getAddress();
+    public isLoggedIn;
+    public user;
+
+
+    ngOnInit() {
+        this.identityService.getAddress().subscribe(address => this.user = address);
+        this.identityService.isLoggedIn().subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+    }
 }
