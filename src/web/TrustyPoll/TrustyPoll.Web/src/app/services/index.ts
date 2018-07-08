@@ -9,6 +9,8 @@ import { NotificationsService } from './core/notifications.service';
 import { RouterService } from './core/router.service';
 import { StorageService } from './core/storage.service';
 import { UtilsService } from './core/utils.service';
+import { Web3Service } from './eth/web3.service';
+import { TrustyPollService } from './eth/trusty-poll.service';
 
 export * from './core/app.service';
 export * from './core/datetime.service';
@@ -21,6 +23,8 @@ export * from './core/notifications.service';
 export * from './core/router.service';
 export * from './core/storage.service';
 export * from './core/utils.service';
+export * from './eth/web3.service';
+export * from './eth/trusty-poll.service';
 
 export const APP_SERVICES = [
     AppService,
@@ -33,5 +37,7 @@ export const APP_SERVICES = [
     NotificationsService,
     RouterService,
     StorageService,
-    UtilsService
+    UtilsService,
+    Web3Service,
+    TrustyPollService
 ];

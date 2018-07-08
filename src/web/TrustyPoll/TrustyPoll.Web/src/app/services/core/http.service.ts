@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { IdentityService } from './identity.service';
 import { LoggerService } from './logger.service';
+import { UtilsService } from './utils.service';
 
 import { environment } from '../../../environments/environment';
 
@@ -16,34 +17,34 @@ export class HttpService {
         private loggerService: LoggerService) { }
 
     public get(url: string, options: RequestOptionsArgs = null): Observable<any> {
-        const opts = this.buildOptions(options);
         this.log('GET -> ' + url);
 
-        return this.http.get(environment.apiUrl + 'api/' + url, opts)
-            .map((res: Response) => {
-                this.log('GET SUCCESS -> ' + url);
-                return this.extractData(res);
-            })
-            .catch(err => {
-                this.log('GET ERROR -> ' + url);
-                return this.handleError(err);
-            });
+        return this.identityService.getAddress().flatMap(address =>
+            this.http.get(environment.apiUrl + 'api/' + url, this.buildOptions(options, address))
+                .map((res: Response) => {
+                    this.log('GET SUCCESS -> ' + url);
+                    return this.extractData(res);
+                })
+                .catch(err => {
+                    this.log('GET ERROR -> ' + url);
+                    return this.handleError(err);
+                }));
     }
 
     public post(url: string, data: any, options: RequestOptionsArgs = null): Observable<any> {
-        const opts = this.buildOptions(options);
-        this.log('POST -> ' + url);
+        this.log('GET -> ' + url);
 
-        return this.http.post(environment.apiUrl + 'api/' + url, data, opts)
-            .map((res: Response) => {
-                this.log('POST SUCCESS -> ' + url);
-                return this.extractData(res);
-            })
-            .catch(err => {
-                this.log('POST ERROR -> ' + url);
-                this.loggerService.debug(err);
-                return this.handleError(err);
-            });
+        return this.identityService.getAddress().flatMap(address =>
+            this.http.post(environment.apiUrl + 'api/' + url, data, this.buildOptions(options, address))
+                .map((res: Response) => {
+                    this.log('POST SUCCESS -> ' + url);
+                    return this.extractData(res);
+                })
+                .catch(err => {
+                    this.log('POST ERROR -> ' + url);
+                    this.loggerService.debug(err);
+                    return this.handleError(err);
+                }));
     }
 
     private extractData(res: Response) {
@@ -59,7 +60,7 @@ export class HttpService {
         return res;
     }
 
-    private handleError(error: any) {
+    private handleError(error: any): Observable<any> {
         if (!error) {
             return Observable.throw('An unknown error has occurred.');
         }
@@ -96,7 +97,7 @@ export class HttpService {
         return Observable.throw(errMsg);
     }
 
-    private buildOptions(options: RequestOptionsArgs): RequestOptionsArgs {
+    private buildOptions(options: RequestOptionsArgs, address: string): RequestOptionsArgs {
         options = options || {};
         options.headers = options.headers || new Headers();
 
@@ -104,7 +105,6 @@ export class HttpService {
             options.headers.append('Content-Type', 'application/json');
         }
 
-        const address = this.identityService.getAddress();
         if (address) {
             options.headers.set('User', address);
         }
