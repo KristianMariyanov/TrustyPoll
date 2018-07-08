@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.23;
 
 contract SafeMath {
   function safeMul(uint a, uint b) internal pure returns (uint) {
@@ -68,14 +68,14 @@ contract TrustyPoll is SafeMath {
   }
   
   function createPoll(string title) public {
-      pollId = SafeAdd(pollId, 1);
+      pollId = safeAdd(pollId, 1);
       polls.push(Poll(pollId, title));
       pollAuthors[pollId] = msg.sender;
   }
   
   function createOption(uint poll, string title) public {
       require(pollAuthors[poll] == msg.sender);
-      optionId  = SafeAdd(optionId, 1);
+      optionId  = safeAdd(optionId, 1);
       pollOptions[poll].push(Option(optionId, title, poll));
   }
   
