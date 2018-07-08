@@ -47,7 +47,7 @@ contract TrustyPoll is SafeMath {
     mapping(uint => mapping(uint => uint)) public pollVotesCount; //(poll -> (option -> votesCount)
     mapping(uint => Option[]) public pollOptions; //(poll -> (user -> option)
     mapping(uint => address) public pollAuthors; //(poll -> (user -> option)
-    Poll[] public polls;
+    mapping(uint => string) public polls; // pollId -> pollTitle
   
   modifier onlyAdmin() {
     require(msg.sender == admin);
@@ -68,8 +68,9 @@ contract TrustyPoll is SafeMath {
   }
   
   function createPoll(string title) public {
+      require(title != '');
       pollId = safeAdd(pollId, 1);
-      polls.push(Poll(pollId, title));
+      polls[pollId] = title;
       pollAuthors[pollId] = msg.sender;
   }
   
@@ -79,7 +80,7 @@ contract TrustyPoll is SafeMath {
       pollOptions[poll].push(Option(optionId, title, poll));
   }
   
-  function vote (uint poll, uint option) public {
+  function vote(uint poll, uint option) public {
     require(pollAuthors[poll] != msg.sender); // authors cannot vote
     require(option > 0);
     require(poll > 0);
