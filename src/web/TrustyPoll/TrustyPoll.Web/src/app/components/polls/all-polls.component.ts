@@ -14,18 +14,19 @@ export class AllPollsComponent implements OnInit {
 
 
     ngOnInit() {
-        const firstPollIndex = 0;
-        this.getNextPoll(firstPollIndex);
+        const firstPollId = 1;
+        this.getNextPoll(firstPollId);
     }
 
     private getNextPoll(pollId: number) {
-        this.trustyPollService.getPollWithIndex(pollId).subscribe(poll => {
-            debugger;
-            if (!poll.id) {
+        this.trustyPollService.getPollById(pollId).subscribe(title => {
+            if (/^\s*$/.test(title)) {
                 return;
             }
-            this.polls.push(poll);
-            this.getNextPoll(pollId++);
+            debugger;
+            this.polls.push({ id: pollId, title });
+            const nextPollId = pollId + 1;
+            this.getNextPoll(nextPollId);
         });
     }
 }

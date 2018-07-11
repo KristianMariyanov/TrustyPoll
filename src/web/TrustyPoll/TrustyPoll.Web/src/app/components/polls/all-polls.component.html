@@ -1,3 +1,5 @@
 <h1>All Polls</h1>
 
-
+<div *ngFor="let poll of polls">
+    <a [routerLink]="['/poll-details/' + poll.id]">{{poll.title}}</a>
+</div>

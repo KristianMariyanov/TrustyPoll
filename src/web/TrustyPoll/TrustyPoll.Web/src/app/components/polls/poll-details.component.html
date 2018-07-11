@@ -1,0 +1,6 @@
+<h1>{{poll.title}}</h1>
+<h1>{{poll.votesCount}} total votes</h1>
+
+<div *ngFor="let option of poll.options">
+    <span (click)="vote(option.id)" [ngClass]="{'bold': option.userVote}">{{option.title}} ({{option.votesCount}} votes ({{option && option.percentage && option.percentage.toFixed(2)}}%))</span>
+</div>
