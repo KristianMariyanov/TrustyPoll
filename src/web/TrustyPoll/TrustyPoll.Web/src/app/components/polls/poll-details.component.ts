@@ -15,12 +15,18 @@ export class PollDetailsComponent implements OnInit {
         protected activatedRoute: ActivatedRoute) { }
 
     public poll: any = {};
+    public loggedUserAddress: string;
 
     ngOnInit() {
+        this.identityService.getAddress()
+            .subscribe(address => {
+                debugger;
+                this.loggedUserAddress = address.toLowerCase();
+            });
+
         this.activatedRoute.params.subscribe(params => {
             const pollId = params['id'];
             this.getPollInfo(pollId);
-            //this.createOption(pollId);
         });
     }
 
@@ -35,27 +41,28 @@ export class PollDetailsComponent implements OnInit {
 
     private getPollInfo(pollId: number) {
         this.trustyPollService.getPollById(pollId).subscribe(title => {
-            if (/^\s*$/.test(title)) {
-                return;
-            }
+            this.trustyPollService.getPollAuthor(pollId).subscribe(author => {
+                if (/^\s*$/.test(title)) {
+                    return;
+                }
 
-            debugger;
+                this.poll.id = pollId;
+                this.poll.title = title;
+                this.poll.author = author.toLowerCase();
+                this.poll.options = [];
 
-            this.poll.id = pollId;
-            this.poll.title = title;
-            this.poll.options = [];
-
-            const firstOptionIndex = 0;
-            this.populateNextOption(pollId, firstOptionIndex);
+                const firstOptionIndex = 0;
+                this.populateNextOption(pollId, firstOptionIndex);
+            })
         });
     }
 
     private populateNextOption(pollId: number, optionIndex: number) {
         this.trustyPollService.getPollOptionId(pollId, optionIndex).subscribe(optionId => {
             if (optionId === 0) {
-                const pollVotesCount = this.poll.options.map(o => o.votesCount).reduce((sum, element) => sum + element);
+                const pollVotesCount = this.poll.options.length && this.poll.options.map(o => o.votesCount).reduce((sum, element) => sum + element);
                 this.poll.votesCount = pollVotesCount;
-                this.poll.options.forEach(element => element.percentage = element.votesCount / pollVotesCount * 100);
+                this.poll.options.forEach(element => element.percentage = (element.votesCount / pollVotesCount * 100) || 0);
                 return;
             }
 

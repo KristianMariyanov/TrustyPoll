@@ -1,0 +1,9 @@
+<h1>Create Poll</h1>
+
+<div class="form-group">
+    <input type="text"
+           class="form-control"
+           [(ngModel)]="poll.title"
+           placeholder="Enter Title">
+</div>
+<button type="submit" class="btn btn-default" (click)="create()">Create</button>

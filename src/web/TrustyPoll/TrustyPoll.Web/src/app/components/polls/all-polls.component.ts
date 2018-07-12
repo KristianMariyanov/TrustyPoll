@@ -23,7 +23,7 @@ export class AllPollsComponent implements OnInit {
             if (/^\s*$/.test(title)) {
                 return;
             }
-            debugger;
+
             this.polls.push({ id: pollId, title });
             const nextPollId = pollId + 1;
             this.getNextPoll(nextPollId);

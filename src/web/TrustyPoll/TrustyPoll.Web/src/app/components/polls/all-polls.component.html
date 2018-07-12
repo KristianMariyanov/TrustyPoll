@@ -1,5 +1,12 @@
 <h1>All Polls</h1>
 
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group"><button class="btn btn-default" [routerLink]="['/poll-create']" type="button" tabindex="0">Create</button>
+        </div>
+    </div>
+</div>
+
 <div *ngFor="let poll of polls">
     <a [routerLink]="['/poll-details/' + poll.id]">{{poll.title}}</a>
 </div>
