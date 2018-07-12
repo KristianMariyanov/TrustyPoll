@@ -13,6 +13,15 @@
  */
 
 module.exports = {
+	networks: {
+		coverage: {
+            host: "localhost",
+            port: 8555,
+            network_id: "*" // Match any network id
+			gasPrice: 0xfffffffffff,
+			gasPrice: 0x01
+        }
+	}
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
 };
