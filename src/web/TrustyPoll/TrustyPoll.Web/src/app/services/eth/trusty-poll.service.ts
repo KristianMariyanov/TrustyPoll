@@ -27,27 +27,53 @@ export class TrustyPollService {
 
         const tx = trustyPoll.methods.createPoll(this.web3Service.web3.utils.asciiToHex(title));
         if (Web3Service.USING_HTTP_NODE) {
-            // TODO: add approve
-            var txData = txData.encodeABI();
+            const txData = tx.encodeABI();
+            const approveTxData = approveTx.encodeABI();
             return UtilsService.observableFromCb(done =>
                 this.identityService.getAddress().subscribe(address => {
                     this.web3Service.getNonce(address).subscribe(
                         nonce => {
                             this.identityService.getPk().subscribe(pk => {
-                                const transaction = {
+                                const approveTransaction = {
                                     from: address,
-                                    to: this.contractAddr,
+                                    to: this.tokenAddr,
                                     gasPrice: this.web3Service.web3.utils.numberToHex(
                                         this.web3Service.web3.utils.toWei(gasPriceInGwei.toString(), 'gwei')),
                                     gasLimit: Web3Service.DEFAULT_GAS_PRICE,
-                                    data: txData,
+                                    data: approveTxData,
                                     nonce: nonce
                                 };
 
-                                var pkWithoutOx = pk.slice(2);
-                                var pkBuffer = Buffer.from(pkWithoutOx, 'hex');
-                                var singedTransaction = this.web3Service.signTransaction(transaction, pkBuffer);
-                                this.web3Service.sendSignedTransaction(singedTransaction).subscribe(transaction => done(true, transaction));
+                                const pkWithoutOx = pk.slice(2);
+                                const pkBuffer = Buffer.from(pkWithoutOx, 'hex');
+                                const approveSingedTransaction =
+                                    this.web3Service.signTransaction(approveTransaction, pkBuffer);
+                                this.web3Service.sendSignedTransaction(approveSingedTransaction)
+                                    .subscribe(receipt => {
+                                        console.log(receipt);
+                                        this.web3Service.getNonce(address).subscribe(
+                                            nonce => {
+                                                this.identityService.getPk().subscribe(pk => {
+                                                    const transaction = {
+                                                        from: address,
+                                                        to: this.contractAddr,
+                                                        gasPrice: this.web3Service.web3.utils.numberToHex(
+                                                            this.web3Service.web3.utils.toWei(gasPriceInGwei.toString(),
+                                                                'gwei')),
+                                                        gasLimit: Web3Service.DEFAULT_GAS_PRICE,
+                                                        data: txData,
+                                                        nonce: nonce
+                                                    };
+
+                                                    var pkWithoutOx = pk.slice(2);
+                                                    var pkBuffer = Buffer.from(pkWithoutOx, 'hex');
+                                                    var singedTransaction =
+                                                        this.web3Service.signTransaction(transaction, pkBuffer);
+                                                    this.web3Service.sendSignedTransaction(singedTransaction)
+                                                        .subscribe(transaction => done(true, transaction));
+                                                });
+                                            });
+                                    });
                             });
                         });
                 }));
