@@ -108,13 +108,13 @@ contract TrustyPollToken is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function TrustyPollToken() public {
+    function TrustyPollToken(address admin) public {
         symbol = "TRT";
         name = "TrustyPoll Token";
         decimals = 18;
         _totalSupply = 10000000000000000000000000;
-        balances[0x9ed8edc3633660cd188469175334bda6c782252b] = _totalSupply;
-        Transfer(address(0), 0x9ed8edc3633660cd188469175334bda6c782252b, _totalSupply);
+        balances[admin] = _totalSupply;
+        Transfer(address(0), admin, _totalSupply);
     }
 
 
