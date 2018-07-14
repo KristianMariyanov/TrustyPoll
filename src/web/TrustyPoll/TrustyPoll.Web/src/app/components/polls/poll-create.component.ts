@@ -12,7 +12,6 @@ export class PollCreateComponent {
 
     public poll: any = {};
 
-
     public create() {
         if (this.poll.title) {
             NotificationsService.confirm(

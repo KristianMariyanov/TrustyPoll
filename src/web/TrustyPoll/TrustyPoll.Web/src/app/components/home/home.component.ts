@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { TrustyPollService } from '../../services/index'
+import { TrustyPollService, PollsService } from '../../services/index'
 
 @Component({
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-    constructor(private trustyPollService: TrustyPollService) { }
+export class HomeComponent implements OnInit {
 
-    createPoll() {
-        const title = 'title';
-        const gas = 30;
-        this.trustyPollService.createPoll(title, gas).subscribe(tx => console.log(tx));
+    constructor(
+        private pollsService: PollsService,
+        private trustyPollService: TrustyPollService) { }
+
+    private allPolls = [];
+    private lastPoll: any;
+
+    ngOnInit() {
+        this.pollsService.populateAllPolls(this.allPolls);
     }
 }

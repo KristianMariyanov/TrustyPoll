@@ -165,7 +165,7 @@ export class TrustyPollService {
         return Observable.fromPromise(this.web3Service.web3.eth.call({
             to: this.contractAddr,
             data: contract.methods.polls(pollId).encodeABI()
-        })).map(poll => this.web3Service.web3.utils.toUtf8(poll));
+        })).map(pollTitle => this.web3Service.web3.utils.toUtf8(pollTitle));
     }
 
     public getPollOptionTitle(pollId: number, optionIndex: number): Observable<any> {

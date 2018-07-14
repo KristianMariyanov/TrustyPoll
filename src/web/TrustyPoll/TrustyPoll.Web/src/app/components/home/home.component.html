@@ -1,3 +1,7 @@
-<h1>HOME</h1>
+<h1>Home</h1>
 
-<button (click)="createPoll()">Create poll</button>
+<div *ngFor="let poll of allPolls">
+    <a [routerLink]="['/poll-details/' + poll.id]">{{poll.title}}</a>
+</div>
+
+{{lastPoll}}
