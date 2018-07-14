@@ -6,4 +6,7 @@
            [(ngModel)]="poll.title"
            placeholder="Enter Title">
 </div>
+
+<input type="file" id="image" [(ngModel)]="poll.image">
+
 <button type="submit" class="btn btn-default" (click)="create()">Create</button>

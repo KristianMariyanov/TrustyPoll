@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
+import { Observable } from 'rxjs/Observable';
 
-import { TrustyPollService, NotificationsService } from '../../services/index'
+import { TrustyPollService, NotificationsService, UtilsService } from '../../services/index'
+//import { IpfsApi } from '../../../typings';
 
 @Component({
     templateUrl: './poll-create.component.html',
@@ -27,6 +29,37 @@ export class PollCreateComponent {
         } else {
             NotificationsService.error('Invalid Title');
         }
-        
+
+        debugger;
+    }
+
+    public uploadPollImage(file) {
+        if (!window['IpfsApi']) {
+            Observable.empty();
+        }
+
+        const ipfs = window['IpfsApi']('localhost', '5001');
+        const buffer = ipfs.buffer;
+
+        return UtilsService.observableFromCb(done => {
+            var reader = new FileReader();
+
+            reader.onload = () => {
+                const fileBuffer = buffer.from(reader.result);
+                return ipfs.files.add(fileBuffer,
+                    (err, result) => {
+                        if (err) {
+                            done(false, err);
+                            return;
+                        }
+
+                        if (result && result.length) {
+                            done(true, result[0].hash);
+                        }
+                    });
+            }
+
+            reader.readAsArrayBuffer(file);
+        });
     }
 }
