@@ -11,6 +11,7 @@ import { NotificationsService } from './notifications.service';
 @Injectable()
 export class IdentityService {
     private static readonly ADDRESS_KEY = 'ADDRESS_KEY';
+    private static readonly PRIVATE_KEY = 'PRIVATE_KEY';
 
     constructor(
         private web3Service: Web3Service,
@@ -21,22 +22,13 @@ export class IdentityService {
     private pwd: string;
     private pwdActiveTo: Date;
     private pwdCleanHandle: any;
-
-    public tempToggleLogin() {
-        if (this.address) {
-            this.removeAddress();
-        }
-        else {
-            this.setAddress('0x0000000000000000000000000000000000000000');
-        }
-    }
-
+    
     public isLoggedIn(): Observable<boolean> {
         return this.getAddress().map(address => !!address);
     }
 
     public getAddress(): Observable<string> {
-        if (this.web3Service.walletAccount()) {
+        if (!Web3Service.USING_HTTP_NODE) {
             return this.web3Service.walletAccount();
         }
 
@@ -47,12 +39,17 @@ export class IdentityService {
             }
         }
 
-        return Observable.from(this.address);
+        return Observable.of(this.address);
     }
 
     public setAddress(address: string) {
         this.address = address.toLowerCase();
         this.storageService.setItem(IdentityService.ADDRESS_KEY, this.address);
+        window.location.href = '/';
+    }
+
+    public setPk(pk: string) {
+        this.storageService.setItem(IdentityService.PRIVATE_KEY, pk);
         window.location.href = '/';
     }
 
@@ -62,10 +59,13 @@ export class IdentityService {
         window.location.href = '/';
     }
 
+    public removePk() {
+        this.storageService.removeItem(IdentityService.PRIVATE_KEY);
+    }
+
     public getPk(): Observable<any> {
-        // TODO: Dynamic?
-        this.pwd = '0x01759e83dfae7067a1151233e52092e75b58b14e7fa5f92ddc5c999235d6ba48';
-        return UtilsService.observableFrom(this.pwd);
+        const pk = this.storageService.getItem(IdentityService.PRIVATE_KEY);
+        return Observable.of(pk);
     }
 
     private log(message: string, isError: boolean = false) {

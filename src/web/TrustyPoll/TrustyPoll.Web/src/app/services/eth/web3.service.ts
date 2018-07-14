@@ -105,6 +105,29 @@ export class Web3Service {
         return Observable.empty();
     }
 
+    public static isValidPk(pk: string): boolean {
+        return pk && /^[0-9a-f]{64}$/i.test(pk.toLowerCase());
+    }
+
+    public addressFromPk(pk: string): string {
+        const account = this.privateKeyToAccount(pk);
+        return account.address;
+    }
+
+    public isValidAddress(addr: string): boolean {
+        return this.web3.utils.isAddress(addr);
+    }
+
+    public generatePk(): string {
+        const account = this.createAccount();
+        let pk = account.privateKey;
+        if (pk.startsWith("0x")) {
+            pk = pk.substring(2);
+        }
+
+        return pk;
+    }
+
     get web3(): any {
         if (!this.web3Instance) {
             this.intializeWeb3();

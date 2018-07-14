@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title text-center">CREATE NEW ACOUNT</h4>
+            </div>
+            <div class="card-content" *ngIf="step !== 3 && step !== 4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="form-horizontal">
+                            <div class="form-group text-center">
+                                <button (click)="unsafeGeneratePk(); changeStep(3)" type="button" class="btn btn-sm btn-primary">CREATE NEW ACCOUNT</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="step === 3">
+                <br />
+                <h4 class="title text-center">Save your account details</h4>
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">&nbsp;</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static height-34px">
+                                        {{unsafePk}}&nbsp;&nbsp;&nbsp;<button (click)="unsafeCopyPk()" class="btn btn-sm btn-primary">{{copyAddressBtnText}}</button>
+                                    </p>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group text-center">
+                                <button (click)="changeStep(4);" type="button" class="btn btn-sm btn-primary">CONTINUE</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="step === 4">
+                <br />
+                <h4 class="title text-center">Verify your account details</h4>
+                <br />
+
+                <div class="row">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">&nbsp;</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static height-34px">
+                                    In order to ensure that you saved your private key, please re-enter it here
+                                </p>
+                            </div>
+                        </div>
+
+                        <div [class]="unsafePkRepeat === unsafePk ? 'form-group':'form-group has-error'">
+                            <label for="unsafePkRepeat" class="col-sm-3 control-label">PRIVATE KEY</label>
+                            <div class="col-sm-8">
+                                <input [(ngModel)]="unsafePkRepeat" name="unsafePkRepeat" type="password" autocomplete="off" required="required" class="form-control material-input" id="unsafePkRepeat" placeholder="YOUR GENERATED PRIVATE KEY" />
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button (click)="unsafeCreate()" type="button" [disabled]="unsafePkRepeat !== unsafePk" class="btn btn-sm btn-primary">CREATE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

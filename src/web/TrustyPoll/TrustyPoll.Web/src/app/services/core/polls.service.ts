@@ -36,7 +36,6 @@ export class PollsService {
     private getNextPoll(pollId: number, polls: any[]) {
         this.trustyPollService.getPollById(pollId).subscribe(title => {
             if (/^\s*$/.test(title)) {
-                debugger;
                 return;
             }
 

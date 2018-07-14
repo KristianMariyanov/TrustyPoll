@@ -27,7 +27,6 @@ export class TrustyPollService {
 
         const tokenContract = new this.web3Service.web3.eth.Contract(Web3Service.ERC_20_TOKEN_ABI, this.tokenAddr);
         const approveTx = tokenContract.methods.approve(this.contractAddr, TrustyPollService.FEE);
-        debugger;
         const tx = trustyPoll.methods.createPoll(this.web3Service.web3.utils.asciiToHex(title));
         if (Web3Service.USING_HTTP_NODE) {
             const txData = tx.encodeABI();
@@ -98,7 +97,7 @@ export class TrustyPollService {
         const tx = trustyPoll.methods.createOption(pollId, this.web3Service.web3.utils.asciiToHex(title));
         if (Web3Service.USING_HTTP_NODE) {
 
-            var txData = txData.encodeABI();
+            var txData = tx.encodeABI();
             return UtilsService.observableFromCb(done =>
                 this.identityService.getAddress().subscribe(address => {
                     this.web3Service.getNonce(address).subscribe(
@@ -132,7 +131,7 @@ export class TrustyPollService {
         const tx = trustyPoll.methods.vote(pollId, optionId);
         if (Web3Service.USING_HTTP_NODE) {
 
-            var txData = txData.encodeABI();
+            var txData = tx.encodeABI();
             return UtilsService.observableFromCb(done =>
                 this.identityService.getAddress().subscribe(address => {
                     this.web3Service.getNonce(address).subscribe(

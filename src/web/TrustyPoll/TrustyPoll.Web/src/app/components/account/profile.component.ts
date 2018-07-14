@@ -15,7 +15,9 @@ export class ProfileComponent implements OnInit {
     public profile: any = {};
 
     ngOnInit() {
-        this.identityService.getAddress().subscribe(address => this.profile.address = address);
+        this.identityService.getAddress().subscribe(address => {
+            this.profile.address = address;
+        });
         // get eth balance
         // get trt balance
 
@@ -26,5 +28,10 @@ export class ProfileComponent implements OnInit {
     public copyAddress() {
         UtilsService.copyToClipboard(this.profile.address);
         NotificationsService.success('Copied!');
+    }
+
+    public logOut() {
+        this.identityService.removePk();
+        this.identityService.removeAddress();
     }
 }

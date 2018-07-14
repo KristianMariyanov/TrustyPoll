@@ -1,5 +1,4 @@
-<h1>{{poll.title}}</h1>
-<h1>{{poll.votesCount}} total votes</h1>
+<h1>{{poll.title}} ({{poll.votesCount}} total votes)</h1>
 
 <div class="row" *ngIf="loggedUserAddress == poll.author">
     <div class="col-md-12">
@@ -9,13 +8,17 @@
     </div>
 </div>
 
-<div *ngFor="let option of poll.options">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" attr.aria-valuenow="{{option.votesCount}}" attr.aria-valuemin="0" attr.aria-valuemax="{{poll.votesCount}}" [style.width.%]="option.percentage">
-            <span class="sr-only">60% Complete</span>
+<div class="list-group" *ngFor="let option of poll.options">
+    <a (click)="vote(option.id)" class="list-group-item">
+        <h4 class="list-group-item-heading" (click)="vote(option.id)" [ngClass]="{'bold': option.userVote}">
+            {{option.title}} ({{option.votesCount}} votes ({{option && option.percentage && option.percentage.toFixed(2)}}%))
+        </h4>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" attr.aria-valuenow="{{option.votesCount}}" attr.aria-valuemin="0" attr.aria-valuemax="{{poll.votesCount}}" [style.width.%]="option.percentage">
+                <span class="sr-only"></span>
+            </div>
         </div>
-    </div>
-    <span (click)="vote(option.id)" [ngClass]="{'bold': option.userVote}">{{option.title}} ({{option.votesCount}} votes ({{option && option.percentage && option.percentage.toFixed(2)}}%))</span>
+    </a>
 </div>
 
 

@@ -8,6 +8,8 @@ import {
     PollCreateComponent,
     OptionCreateComponent,
     ProfileComponent,
+    CreateAccountComponent,
+    ImportAccountComponent,
 } from './components/index';
 
 export const APP_ROUTES: Routes = [
@@ -18,6 +20,8 @@ export const APP_ROUTES: Routes = [
     { path: 'poll-create', component: PollCreateComponent },
     { path: 'option-create/:id', component: OptionCreateComponent },
     { path: 'profile', component: ProfileComponent },
+    { path: 'create-account', component: CreateAccountComponent },
+    { path: 'import-account', component: ImportAccountComponent },
 
     { path: '**', redirectTo: 'home' }
 ];

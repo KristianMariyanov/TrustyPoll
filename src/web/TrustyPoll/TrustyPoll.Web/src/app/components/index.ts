@@ -11,6 +11,8 @@ import { PollCreateComponent } from './polls/poll-create.component';
 import { OptionCreateComponent } from './options/option-create.component';
 
 import { ProfileComponent } from './account/profile.component';
+import { ImportAccountComponent } from './account/import.component';
+import { CreateAccountComponent} from './account/create.component';
 
 import { LoaderComponent } from './shared/loader/loader.component';
 import { WizardComponent } from './shared/wizard/wizard.component';
@@ -29,6 +31,8 @@ export * from './polls/poll-create.component';
 export * from './options/option-create.component';
 
 export * from './account/profile.component';
+export * from './account/import.component';
+export * from './account/create.component';
 
 export * from './shared/loader/loader.component';
 export * from './shared/wizard/wizard.component';
@@ -46,6 +50,8 @@ export const APP_COMPONENTS = [
     PollCreateComponent,
     OptionCreateComponent,
     ProfileComponent,
+    CreateAccountComponent,
+    ImportAccountComponent,
 
     LoaderComponent,
     WizardComponent

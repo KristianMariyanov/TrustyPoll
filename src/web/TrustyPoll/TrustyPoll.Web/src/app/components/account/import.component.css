@@ -1,0 +1,36 @@
+label.control-label {
+    margin-top: 10px !important;
+    padding-right: 10px !important;
+}
+
+.form-group {
+    margin-top: 10px;
+}
+
+/*File upload*/
+.picture-container {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+}
+
+    .picture-container .picture {
+        width: 100px;
+        height: 100px;
+        color: #FFFFFF;
+        margin: 5px auto;
+        overflow: hidden;
+        transition: all 0.2s;
+        -webkit-transition: all 0.2s;
+    }
+
+    .picture-container .picture input[type="file"] {
+        cursor: pointer;
+        display: block;
+        height: 100%;
+        left: 0;
+        opacity: 0 !important;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }

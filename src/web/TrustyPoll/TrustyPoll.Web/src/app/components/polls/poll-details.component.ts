@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { TrustyPollService, IdentityService, PollsService } from '../../services/index'
+import { TrustyPollService, IdentityService, PollsService, NotificationsService } from '../../services/index'
 
 @Component({
     templateUrl: './poll-details.component.html',
@@ -10,6 +10,7 @@ import { TrustyPollService, IdentityService, PollsService } from '../../services
 export class PollDetailsComponent implements OnInit {
 
     constructor(
+        private router: Router,
         private trustyPollService: TrustyPollService,
         private identityService: IdentityService,
         private pollsService: PollsService,
@@ -31,6 +32,12 @@ export class PollDetailsComponent implements OnInit {
     }
 
     public vote(optionId: number) {
-        this.trustyPollService.vote(this.poll.id, optionId, 35).subscribe(console.log);
+        NotificationsService.success('Vote transaction was send', null, 'Success', 5000);
+        this.trustyPollService.vote(this.poll.id, optionId, 35).subscribe(tx => {
+            console.log(tx);
+            var pollId = this.poll.id;
+            this.poll = {};
+            this.pollsService.getPollInfo(pollId,  this.poll);
+        });
     }
 }
