@@ -11,9 +11,9 @@
 <div class="row">
     <div *ngFor="let poll of allPolls">
         <a [routerLink]="['/poll-details/' + poll.id]">
-            <div class="col-sm-6 col-md-4">
+            <div class="col-sm-6 col-md-4 poll">
                 <div class="thumbnail">
-                    <img src="/content/img/car.jpg" attr.alt="{{poll.title}}">
+                    <img src="/content/img/poll.jpg" attr.alt="{{poll.title}}">
                     <div class="caption">
                         <h3>{{poll.title}}</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultricies ultricies dolor placerat lobortis. Morbi dictum tortor metus, nec ornare nisi sagittis nec. Donec placerat tincidunt laoreet. Fusce et vestibulum dui. Duis sed neque sem.</p>

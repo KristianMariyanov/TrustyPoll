@@ -8,5 +8,6 @@ declare module "*.json"; // TODO: investigate for better solution
 declare var Buffer: any;
 declare var QRCode: any;
 declare var introJs: any;
+declare var ipfsApi: any;
 
 declare var Datafeeds: any;
