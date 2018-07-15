@@ -30,7 +30,7 @@ export class PollCreateComponent {
             NotificationsService.error('Invalid Title');
         }
 
-        debugger;
+        //this.uploadPollImage(this.poll.image).subscribe(a => console.log(a));
     }
 
     public uploadPollImage(file) {
